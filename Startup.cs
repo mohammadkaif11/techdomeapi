@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Api1.IReposistory;
+using Api1.Reposistory;
 
 namespace Api1
 {
@@ -35,6 +37,7 @@ namespace Api1
 
             //Entity Framework  
             services.AddDbContext<Context>(options => options.UseSqlServer(ConnectionString));
+            services.AddTransient<IRepository<Note>, NoteReposistory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

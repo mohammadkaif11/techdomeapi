@@ -24,7 +24,7 @@ namespace Api1.Controllers
         [HttpPost]
         public IActionResult post(Note note)
         {
-           _dbContext.Note.Add(note);  
+            _dbContext.Note.Add(note);  
            int a=_dbContext.SaveChanges();
              if (a > 0)
             {
@@ -32,7 +32,7 @@ namespace Api1.Controllers
             }
             else
             {
-                return BadRequest("Not handle this reques");
+                return BadRequest("Server Error");
             }
         }
     }
