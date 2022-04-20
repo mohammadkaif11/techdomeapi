@@ -41,6 +41,13 @@ namespace Api1.Controllers
 
         }
 
+        [HttpPut]
+        public IActionResult Put(Note note)
+        {
+            _noteRepository.Update(note);
+            return Ok(note);
+        }
+
 
     }
 }
