@@ -20,7 +20,7 @@ namespace Api1.Reposistory
             {
                 return null;
             }
-            return null;
+            return user;
         }
 
         public User RegisterByAdmin(User user)
@@ -34,7 +34,7 @@ namespace Api1.Reposistory
 
         public User RegisterByUser(User user)
         {
-            user.Roles = "Admin";
+            user.Roles = "User";
             _dbContext.User.Add(user);
             _dbContext.SaveChanges();
             return user;

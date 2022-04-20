@@ -38,6 +38,8 @@ namespace Api1
             //Entity Framework  
             services.AddDbContext<Context>(options => options.UseSqlServer(ConnectionString));
             services.AddTransient<IRepository<Note>, NoteReposistory>();
+            services.AddTransient<IUserReposistory, UserReposistory>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
