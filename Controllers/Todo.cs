@@ -1,4 +1,5 @@
-﻿using Api1.Models;
+﻿using Api1.IReposistory;
+using Api1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,14 @@ namespace Api1.Controllers
     [ApiController]
     public class Todo : ControllerBase
     {
-        private readonly Context _dbContext;
 
-        public Todo(Context dbContext)
+        private readonly IRepository<Note> _noteRepository;   
+
+        public Todo(IRepository<Note> repository )
         {
-            _dbContext = dbContext;
+            _noteRepository = repository;   
         }
+
 
         [HttpGet]   
         public IActionResult Get()
@@ -24,16 +27,11 @@ namespace Api1.Controllers
         [HttpPost]
         public IActionResult post(Note note)
         {
-            _dbContext.Note.Add(note);  
-           int a=_dbContext.SaveChanges();
-             if (a > 0)
-            {
-                return Ok(note);
-            }
-            else
-            {
-                return BadRequest("Server Error");
-            }
+
+            _noteRepository.Create(note);   
+            
+              return Ok(note);
+           
         }
     }
 }
