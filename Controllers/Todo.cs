@@ -19,9 +19,10 @@ namespace Api1.Controllers
 
 
         [HttpGet]   
-        public IActionResult Get()
+        public IActionResult GetAllitem()
         {
-            return Ok("Ok");
+          var obj= _noteRepository.GetAll();
+            return Ok(obj);
         }
 
         [HttpPost]
