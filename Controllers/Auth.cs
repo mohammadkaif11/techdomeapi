@@ -2,6 +2,7 @@
 using Api1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,11 +15,13 @@ namespace Api1.Controllers
     public class Auth : ControllerBase
     {
         private readonly IUserReposistory _repsistory;
-        private object _configuration;
+        private readonly IConfiguration _configuration;
 
-        public Auth(IUserReposistory repository)
+
+        public Auth(IUserReposistory repository, IConfiguration configuration)
         {
             _repsistory = repository;
+            _configuration = configuration;
         }
         [HttpGet("{id}")]
 
@@ -45,7 +48,32 @@ namespace Api1.Controllers
             {
                 return BadRequest("user is not found");
             }
-            return Ok(user);
+            string token = CreateToken(user);
+            return Ok(new {Accestoken =token});
+        }
+
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Roles)
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                //expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+                );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
 
 
