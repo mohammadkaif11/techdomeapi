@@ -9,6 +9,8 @@ namespace Api1.Models
 
         }
         public DbSet<Note> Note { get; set; }
+        public DbSet<User> User { get; set; }
+
 
     }
 }
