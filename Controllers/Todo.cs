@@ -48,6 +48,13 @@ namespace Api1.Controllers
             return Ok(note);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            Note note = _noteRepository.GetById(id);
+            return Ok(note);
+
+        }
 
     }
 }
