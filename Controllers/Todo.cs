@@ -27,11 +27,20 @@ namespace Api1.Controllers
         [HttpPost]
         public IActionResult post(Note note)
         {
-
             _noteRepository.Create(note);   
             
               return Ok(note);
            
         }
+        
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _noteRepository.Delete(id);
+            return Ok("Item is delete");
+
+        }
+
+
     }
 }
