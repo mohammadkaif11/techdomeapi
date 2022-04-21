@@ -1,4 +1,15 @@
 
+# JWT(JsonWebToken authorization and authentication)
+
+In  This Project i have created A simple Restfull api with
+authentication and authorization.In This Api  we have two controlle
+Auth and Todo.Auth controller Works on User Register or Login.
+wheres Todo  controller Works on Crud operations.
+
+Authentication means to confirm your own identity, while authorization means to grant access to the system. In simple terms, authentication verifies who you are, while authorization verifies what you have access to
+### Note
+This is Not Production Ready Api Because i not implement the Error Handling. 
+
 ## Auth
 #### RegisterUser 
 
