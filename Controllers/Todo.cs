@@ -13,10 +13,13 @@ namespace Api1.Controllers
 
         private readonly IRepository<Note> _noteRepository;
 
+        //intialize the Note Reposistory
         public Todo(IRepository<Note> repository)
         {
             _noteRepository = repository;
         }
+
+        //Get All Todo
         [AllowAnonymous]
         [HttpGet]
         [Authorize(Roles = "Admin,User")]
@@ -26,6 +29,7 @@ namespace Api1.Controllers
             return Ok(obj);
         }
 
+        //Add Todo 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult post(Note note)
@@ -36,6 +40,7 @@ namespace Api1.Controllers
            
         }
         
+        //Delete Todo by id
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
@@ -45,6 +50,7 @@ namespace Api1.Controllers
 
         }
 
+        //Update Todo By id
         [HttpPut]
         [Authorize(Roles = "Admin")]
         public IActionResult Put(Note note)
@@ -52,7 +58,7 @@ namespace Api1.Controllers
             _noteRepository.Update(note);
             return Ok(note);
         }
-
+       //Get Todo By id
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult GetById(int id)

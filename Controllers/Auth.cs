@@ -15,6 +15,7 @@ namespace Api1.Controllers
     [ApiController]
     public class Auth : ControllerBase
     {
+        //Dependecy Injection
         private readonly IUserReposistory _repsistory;
         private readonly IConfiguration _configuration;
 
@@ -24,9 +25,8 @@ namespace Api1.Controllers
             _repsistory = repository;
             _configuration = configuration;
         }
-        [HttpGet("{id}")]
 
-
+        //Regsister User with Role as User
         [HttpPost("{UserRegister}")]
         public IActionResult RegisterUser(User user)
         {
@@ -34,6 +34,7 @@ namespace Api1.Controllers
             return Ok(user);
         }
 
+        //Regsister User with Role as Admin
         [HttpPost("AdminRegister")]
         public IActionResult RegisterAdmin(User user)
         {
@@ -41,6 +42,7 @@ namespace Api1.Controllers
             return Ok(user);
         }
 
+        //Login With Email and Password send Token
         [HttpPost("Login")]
         public IActionResult Login(Login login)
         {
@@ -53,6 +55,7 @@ namespace Api1.Controllers
             return Ok(new {Accestoken =token});
         }
 
+        //CreateToken Function
         private string CreateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
