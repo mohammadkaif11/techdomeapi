@@ -1,5 +1,6 @@
 ﻿using Api1.IReposistory;
 using Api1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,15 +11,15 @@ namespace Api1.Controllers
     public class Todo : ControllerBase
     {
 
-        private readonly IRepository<Note> _noteRepository;   
+        private readonly IRepository<Note> _noteRepository;
 
-        public Todo(IRepository<Note> repository )
+        public Todo(IRepository<Note> repository)
         {
-            _noteRepository = repository;   
+            _noteRepository = repository;
         }
-
-
-        [HttpGet]   
+        [AllowAnonymous]
+        [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public IActionResult GetAllitem()
         {
           var obj= _noteRepository.GetAll();
@@ -26,6 +27,7 @@ namespace Api1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult post(Note note)
         {
             _noteRepository.Create(note);   
@@ -35,6 +37,7 @@ namespace Api1.Controllers
         }
         
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             _noteRepository.Delete(id);
@@ -43,6 +46,7 @@ namespace Api1.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public IActionResult Put(Note note)
         {
             _noteRepository.Update(note);
@@ -50,6 +54,7 @@ namespace Api1.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetById(int id)
         {
             Note note = _noteRepository.GetById(id);

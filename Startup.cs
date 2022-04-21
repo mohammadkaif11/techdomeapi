@@ -1,8 +1,6 @@
 using Api1.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +12,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Api1.IReposistory;
 using Api1.Reposistory;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace Api1
 {
@@ -32,13 +35,41 @@ namespace Api1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
             services.AddControllers();
             var ConnectionString = Configuration.GetConnectionString("cs");
-
             //Entity Framework  
             services.AddDbContext<Context>(options => options.UseSqlServer(ConnectionString));
             services.AddTransient<IRepository<Note>, NoteReposistory>();
             services.AddTransient<IUserReposistory, UserReposistory>();
+
+            var tokenKey = Configuration.GetValue<string>("TokenKey");
+            var key = Encoding.ASCII.GetBytes(tokenKey);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+
+
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+
+                    
+                   
+                };
+            });
 
         }
 
@@ -54,6 +85,7 @@ namespace Api1
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
